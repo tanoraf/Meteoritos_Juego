@@ -12,6 +12,7 @@ var dir_rotacion:int = 0
 ## Atributos Onready
 onready var canion:Canion = $Canion
 onready var laser:RayoLaser = $LaserBeam2D
+onready var motor_sfx:Motor = $MotorSFX
 
 ## Metodos
 func _unhandled_input(event: InputEvent) -> void:
@@ -21,6 +22,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 		if event.is_action_released("disparo_secundario"):
 			laser.set_is_casting(false)
+# Control sonido motor
+ if event.is_action_pressed("mover_adelante"):
+	 $MotorSFX.sonido_on()
+	elif event.is_action_pressed("mover_atras"):
+		$MotorSFX.sonido_on()
+		if (event.is_action_released("mover_adelante")
+		or event.is_action_released("mover_atras")):
+			motor_sfx.sonido_off()
 
 func _integrate_forces(state: Physics2DDirectBodyState) -> void:
 	apply_central_impulse(empuje.rotated(rotation))
@@ -47,7 +56,7 @@ func player_input() -> void:
 	
 	# Disparo
 	if Input.is_action_pressed("disparo_principal"):
-		 canion.set_esta_disparando(true)
+		canion.set_esta_disparando(true)
 		
 	if Input.is_action_just_released("disparo_principal"):
-		 canion.set_esta_disparando(false)
+		canion.set_esta_disparando(false)
